@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, LVType) {
+typedef NS_ENUM(NSInteger, LVType) {
+    LVTypeError = -1,
     LVTypeNil,
     LVTypeNumber,
     LVTypeBoolean,
@@ -20,7 +21,7 @@ typedef NS_ENUM(NSUInteger, LVType) {
     LVTypeInteger,
     LVTypeData,
     LVTypeFunction,
-    LVTypeTuple
+    LVTypeTuple,
 };
 
 @interface LuaValue: NSObject
@@ -38,14 +39,18 @@ typedef LuaValue* (^CFunctionHandler) (NSArray<LuaValue *> *arguments);
 
 @interface LuaBridge: NSObject
 
-- (void)evalScriptFromString:(NSString *)string;
+/// Return 0 success.
+- (NSInteger)evalScriptFromString:(NSString *)string;
 
-- (void)evalScriptFromFile:(NSString *)filePath;
+/// Return 0 success.
+- (NSInteger)evalScriptFromFile:(NSString *)filePath;
 
 
-- (void)registerMethodWithName:(NSString *)methodName
-                         block:(CFunctionHandler)block;
+/// Return 0 success.
+- (NSInteger)registerMethodWithName:(NSString *)methodName
+                              block:(CFunctionHandler)block;
 
+/// Return un LVTypeError success.
 - (LuaValue *)callMethodWithName:(NSString *)methodName
                        arguments:(NSArray<LuaValue *> *)arguments;
 @end

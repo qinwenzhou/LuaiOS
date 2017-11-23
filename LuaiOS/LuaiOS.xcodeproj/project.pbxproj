@@ -71,7 +71,7 @@
 		78FB6CFD1FC6675D00900438 /* lvm.h in Headers */ = {isa = PBXBuildFile; fileRef = 78FB6CBF1FC6675D00900438 /* lvm.h */; };
 		78FB6CFE1FC6675D00900438 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 78FB6CC01FC6675D00900438 /* lzio.c */; };
 		78FB6CFF1FC6675D00900438 /* lzio.h in Headers */ = {isa = PBXBuildFile; fileRef = 78FB6CC11FC6675D00900438 /* lzio.h */; };
-		78FB6D001FC6675D00900438 /* LuaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 78FB6CC21FC6675D00900438 /* LuaBridge.h */; };
+		78FB6D001FC6675D00900438 /* LuaBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 78FB6CC21FC6675D00900438 /* LuaBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -287,11 +287,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78FB6D001FC6675D00900438 /* LuaBridge.h in Headers */,
 				78FB6CFF1FC6675D00900438 /* lzio.h in Headers */,
 				78FB6CD91FC6675D00900438 /* lgc.h in Headers */,
 				78FB6CCF1FC6675D00900438 /* lctype.h in Headers */,
 				78FB6CCC1FC6675D00900438 /* lcode.h in Headers */,
-				78FB6D001FC6675D00900438 /* LuaBridge.h in Headers */,
 				78FB6CC61FC6675D00900438 /* lapi.h in Headers */,
 				78FB6CFD1FC6675D00900438 /* lvm.h in Headers */,
 				78FB6CF41FC6675D00900438 /* ltm.h in Headers */,

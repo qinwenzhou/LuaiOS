@@ -51,78 +51,88 @@
 
 // MARK: - Public
 
-- (void)evalScriptFromString:(NSString *)string {
+- (NSInteger)evalScriptFromString:(NSString *)string {
     if (!string || string.length == 0) {
         NSLog(@"Lua string is empty!");
-        return;
+        return -1;
     }
     
-    if (luaL_loadstring(L, string.UTF8String) != 0) {
+    int res = luaL_loadstring(L, string.UTF8String);
+    if (res != 0) {
         luaL_error(L, "compile error: %s", lua_tostring(L, -1));
         
     } else {
-        if (lua_pcall(L, 0, 0, 0) != 0) {
+        res = lua_pcall(L, 0, 0, 0);
+        if (res != 0) {
             luaL_error(L, "run error: %s", lua_tostring(L, -1));
         }
     }
-
+    
     lua_gc(L, 2, 0); // Collection the memory.
+    
+    return res;
 }
 
-- (void)evalScriptFromFile:(NSString *)filePath {
+- (NSInteger)evalScriptFromFile:(NSString *)filePath {
     if (!filePath || filePath.length == 0) {
         NSLog(@"Lua file is empty!");
-        return;
+        return -1;
     }
     
     if (![filePath hasPrefix:@"/"]) {
         filePath = [[NSBundle mainBundle] pathForResource:filePath ofType:nil];
     }
     
-    if (luaL_loadfile(L, filePath.UTF8String) != 0) {
+    int res = luaL_loadfile(L, filePath.UTF8String);
+    if (res != 0) {
         luaL_error(L, "compile error: %s", lua_tostring(L, -1));
         
     } else {
-        if (lua_pcall(L, 0, 0, 0) != 0) {
+        res = lua_pcall(L, 0, 0, 0);
+        if (res != 0) {
             luaL_error(L, "run error: %s", lua_tostring(L, -1));
         }
     }
 
     lua_gc(L, 2, 0); // Collection the memory.
+    
+    return res;
 }
 
 - (LuaValue *)callMethodWithName:(NSString *)methodName
                        arguments:(NSArray<LuaValue *> *)arguments {
-    LuaValue *result = nil;
+    LuaValue *res = nil;
     
     lua_getglobal(L, methodName.UTF8String);
-    if (lua_isfunction(L, -1)) {
+    if (!lua_isfunction(L, -1)) {
+        lua_pop(L, 1); // Remove from top stack
+        res = [LuaValue valueWithType:LVTypeError info:nil];
+        
+    } else {
         __weak LuaBridge *weakSelf = self;
         [arguments enumerateObjectsUsingBlock:^(LuaValue *value, NSUInteger idx, BOOL *stop) {
             [weakSelf pushStackWithValue:value];
         }];
         
         if (lua_pcall(L, (int)arguments.count, LUA_MULTRET, 0) == 0) { // Success
-            result = [self valueForArgumentsAtIndex:-1];
+            res = [self valueForArgumentsAtIndex:-1];
             
         } else { // Failure
             LuaValue *value = [self valueForArgumentsAtIndex:-1];
             NSLog(@"Unabled call %@. %@", methodName, value.info);
+            res = [LuaValue valueWithType:LVTypeError info:nil];
         }
         
         lua_pop(L, 1); // Pop result
-        
-    } else {
-        lua_pop(L, 1); // Remove from top stack
     }
     
     lua_gc(L, 2, 0); // Collection the memory
     
-    return result;
+    return res;
 }
 
-- (void)registerMethodWithName:(NSString *)methodName
-                         block:(CFunctionHandler)block {
+- (NSInteger)registerMethodWithName:(NSString *)methodName
+                              block:(CFunctionHandler)block {
     if (![self.methodBlocks objectForKey:methodName]) {
         [self.methodBlocks setObject:block forKey:methodName];
         
@@ -132,9 +142,12 @@
         lua_pushcclosure(L, cfuncHandler, 2);
         lua_setglobal(L, cfuncName);
         
+        return 0;
+        
     } else {
         NSLog(@"Unabled register %@. The method of the specified name already exists!",
               methodName);
+        return -1;
     }
 }
 
