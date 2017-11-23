@@ -1,8 +1,8 @@
 //
 //  LuaBridge.h
-//  Lua
+//  LuaiOS
 //
-//  Created by ubt on 2017/11/14.
+//  Created by qwz on 2017/11/14.
 //  Copyright © 2017年 qwz. All rights reserved.
 //
 
@@ -23,7 +23,6 @@ typedef NS_ENUM(NSUInteger, LVType) {
     LVTypeTuple
 };
 
-
 @interface LuaValue: NSObject
 
 @property (nonatomic) LVType type;
@@ -34,7 +33,7 @@ typedef NS_ENUM(NSUInteger, LVType) {
 @end
 
 
-// LuaBridge
+////////
 typedef LuaValue* (^CFunctionHandler) (NSArray<LuaValue *> *arguments);
 
 @interface LuaBridge: NSObject

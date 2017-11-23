@@ -1,8 +1,8 @@
 //
 //  LuaBridge.m
-//  Lua
+//  LuaiOS
 //
-//  Created by ubt on 2017/11/14.
+//  Created by qwz on 2017/11/14.
 //  Copyright © 2017年 qwz. All rights reserved.
 //
 
@@ -37,9 +37,6 @@
     lua_State *L;
 }
 
-
-// MARK: - Init
-
 - (id)init {
     if (self = [super init]) {
         L = luaL_newstate();
@@ -50,31 +47,6 @@
     }
     return self;
 }
-
-
-// MARK: - Singleton
-
-//static LuaBridge *singletonInstance = nil;
-//
-//+ (instancetype)sharedInstance {
-//    static dispatch_once_t once;
-//    dispatch_once(&once, ^{
-//        singletonInstance = [[self alloc] init];
-//    });
-//    return singletonInstance;
-//}
-//
-//+ (instancetype)allocWithZone: (struct _NSZone *)zone {
-//    static dispatch_once_t once;
-//    dispatch_once(&once, ^{
-//        singletonInstance = [super allocWithZone:zone];
-//    });
-//    return singletonInstance;
-//}
-//
-//- (id)copyWithZone: (struct _NSZone *)zone {
-//    return singletonInstance;
-//}
 
 
 // MARK: - Public
